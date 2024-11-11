@@ -16,25 +16,23 @@ public class CompteMetierImpl implements CompteMetier {
 
     @Autowired
     private ClientRepository clientRepository;
+
     @Override
     public Compte saveCompte(Compte c) {
-        // Check if the client is set in the Compte object
         if (c.getClient() == null || c.getClient().getCodeClient() == null) {
             throw new IllegalArgumentException("Client ID is required.");
         }
 
-        // Fetch the client by ID (codeClient)
         Client client = clientRepository.findById(c.getClient().getCodeClient()).orElse(null);
         if (client == null) {
             throw new RuntimeException("Client not found with code: " + c.getClient().getCodeClient());
         }
 
-        // Set the client to the compte
         c.setClient(client);
 
-        // Save and return the compte
         return compteRepository.save(c);
     }
+
 
     @Override
     public List<Compte> listCompte() {
